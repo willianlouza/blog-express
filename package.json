@@ -5,9 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
-    "tsc": "tsc",
-    "prepare": "yarn run tsc",
-    "start:prod": "node build/index.js"
+    "build": "tsc",
+    "start": "node build/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
