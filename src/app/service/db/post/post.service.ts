@@ -35,11 +35,13 @@ export async function GetAllPostsFromUser(
   return new Promise(async (resolve, reject) => {
     try {
       await prisma.$connect();
+      const author = await prisma.user.findUnique({ where: { id: uid } });
+      if (!author) return reject(new Error());
       const posts = await prisma.post.findMany({
         skip: offset,
         take: limit,
         where: {
-          authorId: uid,
+          author: author,
         },
       });
       prisma.$disconnect();
