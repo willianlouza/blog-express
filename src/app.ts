@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import userRouter from "./app/route/user.router";
+import postRouter from "./app/route/post.router";
 
 export default class App {
   server: express.Application;
@@ -17,6 +18,7 @@ export default class App {
     this.server.use(bodyParser.json());
   }
   routes() {
-    this.server.use(userRouter)
+    this.server.use(userRouter);
+    this.server.use(postRouter);
   }
 }
