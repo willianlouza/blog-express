@@ -6,9 +6,13 @@ export type UserOptions = {
   name: string;
 };
 
-export async function CreateUser(prisma: PrismaClient, options: UserOptions): Promise<User | null> {
+export async function CreateUser(
+  prisma: PrismaClient,
+  options: UserOptions
+): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const user = await prisma.user.create({
         data: {
           name: options.name,
@@ -26,9 +30,13 @@ export async function CreateUser(prisma: PrismaClient, options: UserOptions): Pr
   });
 }
 
-export async function GetUserById(prisma: PrismaClient, id: number): Promise<User | null> {
+export async function GetUserById(
+  prisma: PrismaClient,
+  id: number
+): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const user = await prisma.user.findUnique({
         where: { id: id },
       });
@@ -41,9 +49,13 @@ export async function GetUserById(prisma: PrismaClient, id: number): Promise<Use
   });
 }
 
-export async function GetUserByUsername(prisma: PrismaClient, username: string): Promise<User | null> {
+export async function GetUserByUsername(
+  prisma: PrismaClient,
+  username: string
+): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const user = await prisma.user.findUnique({
         where: { username: username },
       });
@@ -56,9 +68,15 @@ export async function GetUserByUsername(prisma: PrismaClient, username: string):
   });
 }
 
-export async function UpdateProfile(prisma: PrismaClient, id: number, name: string, iconUrl: string): Promise<User | null> {
+export async function UpdateProfile(
+  prisma: PrismaClient,
+  id: number,
+  name: string,
+  iconUrl: string
+): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const user = await prisma.user.update({
         data: {
           name: name,

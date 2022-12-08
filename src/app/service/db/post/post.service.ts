@@ -15,9 +15,12 @@ export async function GetAllPosts(
 ): Promise<Post[] | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const posts = await prisma.post.findMany({ skip: offset, take: limit });
+      prisma.$disconnect();
       return resolve(posts);
     } catch (err) {
+      prisma.$disconnect();
       return reject(err);
     }
   });
@@ -31,6 +34,7 @@ export async function GetAllPostsFromUser(
 ): Promise<Post[] | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const posts = await prisma.post.findMany({
         skip: offset,
         take: limit,
@@ -38,8 +42,10 @@ export async function GetAllPostsFromUser(
           authorId: uid,
         },
       });
+      prisma.$disconnect();
       return resolve(posts);
     } catch (err) {
+      prisma.$disconnect();
       return reject(err);
     }
   });
@@ -51,9 +57,12 @@ export async function GetPostById(
 ): Promise<Post | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const post = await prisma.post.findUnique({ where: { id: id } });
+      prisma.$disconnect();
       return resolve(post);
     } catch (err) {
+      prisma.$disconnect();
       return reject(err);
     }
   });
@@ -72,6 +81,7 @@ export async function CreatePost(
 ): Promise<Post | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const newPost = await prisma.post.create({
         data: {
           title: data.title,
@@ -80,8 +90,10 @@ export async function CreatePost(
           authorId: data.authorId,
         },
       });
+      prisma.$disconnect();
       return resolve(newPost);
     } catch (err) {
+      prisma.$disconnect();
       return reject(err);
     }
   });
@@ -94,6 +106,7 @@ export async function UpdatePost(
 ): Promise<Post | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const post = await prisma.post.update({
         where: { id: id },
         data: {
@@ -102,8 +115,10 @@ export async function UpdatePost(
           image: data.imageUrl,
         },
       });
+      prisma.$disconnect();
       return resolve(post);
     } catch (err) {
+      prisma.$disconnect();
       return reject(err);
     }
   });
@@ -115,11 +130,14 @@ export async function DeletePost(
 ): Promise<Post | null> {
   return new Promise(async (resolve, reject) => {
     try {
+      await prisma.$connect();
       const post = await prisma.post.delete({
         where: { id: id },
       });
+      prisma.$disconnect();
       return resolve(post);
     } catch (err) {
+      prisma.$disconnect();
       return reject(err);
     }
   });
