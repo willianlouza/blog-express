@@ -5,9 +5,8 @@ export type UserOptions = {
   password: string;
   name: string;
 };
-const prisma = new PrismaClient();
 
-export async function CreateUser(options: UserOptions): Promise<User | null> {
+export async function CreateUser(prisma: PrismaClient, options: UserOptions): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await prisma.user.create({
@@ -15,6 +14,7 @@ export async function CreateUser(options: UserOptions): Promise<User | null> {
           name: options.name,
           username: options.username,
           password: options.password,
+          icon: "https://res.cloudinary.com/dsd9hrqmo/image/upload/v1670164808/user_mzard4.png",
         },
       });
       prisma.$disconnect();
@@ -26,7 +26,7 @@ export async function CreateUser(options: UserOptions): Promise<User | null> {
   });
 }
 
-export async function GetUserById(id: number): Promise<User | null> {
+export async function GetUserById(prisma: PrismaClient, id: number): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await prisma.user.findUnique({
@@ -41,9 +41,7 @@ export async function GetUserById(id: number): Promise<User | null> {
   });
 }
 
-export async function GetUserByUsername(
-  username: string
-): Promise<User | null> {
+export async function GetUserByUsername(prisma: PrismaClient, username: string): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await prisma.user.findUnique({
@@ -58,15 +56,13 @@ export async function GetUserByUsername(
   });
 }
 
-export async function ChangeUserName(
-  id: number,
-  name: string
-): Promise<User | null> {
+export async function UpdateProfile(prisma: PrismaClient, id: number, name: string, iconUrl: string): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await prisma.user.update({
         data: {
           name: name,
+          icon: iconUrl,
         },
         where: { id: id },
       });
