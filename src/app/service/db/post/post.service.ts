@@ -87,7 +87,11 @@ export async function CreatePost(
           title: data.title,
           content: data.content,
           image: data.imageUrl,
-          authorId: data.authorId,
+          author: {
+            connect: {
+              id: data.authorId,
+            },
+          },
         },
       });
       prisma.$disconnect();
@@ -110,6 +114,7 @@ export async function UpdatePost(
       const post = await prisma.post.update({
         where: { id: id },
         data: {
+          ...data,
           title: data.title,
           content: data.content,
           image: data.imageUrl,
