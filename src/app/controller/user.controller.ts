@@ -162,8 +162,6 @@ class UserController {
 
       if (name && icon) {
         if (name !== user.name && icon !== user.iconUrl) {
-          console.log("Trying to update full profile");
-
           const updatedUser = await User.updateProfile(id, name, icon);
           return res.status(200).json({
             status: API_Status.OK,

@@ -76,12 +76,12 @@ class PostController {
   }
   //Delete one post
   public async DeletePost(
-    req: Request<{}, {}, { id: number }, {}>,
+    req: Request<{ postId: number }, {}, {}, {}>,
     res: Response
   ) {
     try {
-      const { id } = req.body;
-      const post = await Post.delete(id);
+      const { postId } = req.params;
+      const post = await Post.delete(postId);
       if (!post)
         return res
           .status(404)
@@ -97,16 +97,17 @@ class PostController {
   //Update one post
   public async UpdatePost(
     req: Request<
+      { postId: number },
       {},
-      {},
-      { id: number; title: string; content: string; imageUrl: string },
+      { title: string; content: string; imageUrl: string },
       {}
     >,
     res: Response
   ) {
     try {
-      const { id, title, content, imageUrl } = req.body;
-      const post = await Post.updatePost(id, { title, content, imageUrl });
+      const { postId } = req.params;
+      const { title, content, imageUrl } = req.body;
+      const post = await Post.updatePost(postId, { title, content, imageUrl });
       if (!post)
         return res.status(404).json({
           status: API_Status.ERROR,
