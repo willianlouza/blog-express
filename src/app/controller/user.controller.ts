@@ -192,6 +192,27 @@ class UserController {
       });
     }
   }
+
+  public async ListUsers(req: Request, res: Response) {
+    try {
+      const user = await User.listUsers();
+      if (!user) {
+        return res.status(404).json({
+          status: API_Status.ERROR,
+          message: "Usuário não encontrado.",
+        });
+      }
+
+      return res
+        .status(200)
+        .json({ status: API_Status.OK, message: "Usuário encontrado.", user });
+    } catch (err) {
+      return res.status(500).json({
+        status: API_Status.ERROR,
+        message: "Não foi possível encontrar o usuário.",
+      });
+    }
+  }
 }
 
 export default new UserController();

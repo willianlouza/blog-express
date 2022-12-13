@@ -18,7 +18,8 @@ export async function CreateUser(
           name: options.name,
           username: options.username,
           password: options.password,
-          icon: "https://res.cloudinary.com/dsd9hrqmo/image/upload/v1670164808/user_mzard4.png",
+          iconUrl:
+            "https://res.cloudinary.com/dsd9hrqmo/image/upload/v1670164808/user_mzard4.png",
         },
       });
       prisma.$disconnect();
@@ -80,12 +81,28 @@ export async function UpdateProfile(
       const user = await prisma.user.update({
         data: {
           name: name,
-          icon: iconUrl,
+          iconUrl: iconUrl,
         },
         where: { id: id },
       });
       prisma.$disconnect();
       resolve(user);
+    } catch (err) {
+      prisma.$disconnect();
+      reject(err);
+    }
+  });
+}
+
+////
+
+export async function ListUsers(prisma: PrismaClient): Promise<User[] | null> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await prisma.$connect();
+      const users = await prisma.user.findMany();
+      prisma.$disconnect();
+      resolve(users);
     } catch (err) {
       prisma.$disconnect();
       reject(err);

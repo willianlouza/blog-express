@@ -15,7 +15,7 @@ model User {
   name     String
   username String  @unique
   password String
-  icon     String?
+  iconUrl  String?
   posts    Post[]
 }
 
@@ -23,7 +23,7 @@ model Post {
   id       Int    @id @default(autoincrement())
   title    String
   content  String
-  image    String
+  imageUrl String
   author   User   @relation(fields: [authorId], references: [id])
   authorId Int
 }

@@ -1,4 +1,4 @@
-import { Post, PrismaClient } from "@prisma/client";
+import { Post, PrismaClient, User } from "@prisma/client";
 import { create } from "domain";
 import {
   UpdateProfile,
@@ -36,7 +36,10 @@ export async function GetAllPostsFromUser(
     try {
       await prisma.$connect();
       const author = await prisma.user.findUnique({ where: { id: uid } });
-      if (!author) return reject(new Error());
+      if (!author) {
+        prisma.$disconnect();
+        return reject(new Error());
+      }
       const posts = await prisma.post.findMany({
         skip: offset,
         take: limit,
@@ -86,9 +89,9 @@ export async function CreatePost(
       await prisma.$connect();
       const newPost = await prisma.post.create({
         data: {
-          title: data.title,
           content: data.content,
-          image: data.imageUrl,
+          title: data.title,
+          imageUrl: data.imageUrl,
           author: {
             connect: {
               id: data.authorId,
@@ -116,10 +119,9 @@ export async function UpdatePost(
       const post = await prisma.post.update({
         where: { id: id },
         data: {
-          ...data,
           title: data.title,
           content: data.content,
-          image: data.imageUrl,
+          imageUrl: data.imageUrl,
         },
       });
       prisma.$disconnect();

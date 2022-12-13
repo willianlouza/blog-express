@@ -4,6 +4,7 @@ import {
   GetUserById,
   GetUserByUsername,
   UserOptions,
+  ListUsers,
 } from "./user/user.service";
 import {
   CreatePost,
@@ -24,6 +25,7 @@ export const User = {
   createNew: (username: UserOptions) => CreateUser(prisma, username),
   getById: (id: number) => GetUserById(prisma, id),
   getByUsername: (username: string) => GetUserByUsername(prisma, username),
+  listUsers: () => ListUsers(prisma),
 };
 
 export const Post = {
