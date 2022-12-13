@@ -1,10 +1,11 @@
 import {
-  UpdateProfile,
+  UpdateIcon,
+  UpdateName,
+  UpdateFullProfile,
   CreateUser,
   GetUserById,
   GetUserByUsername,
   UserOptions,
-  ListUsers,
 } from "./user/user.service";
 import {
   CreatePost,
@@ -21,11 +22,12 @@ const prisma = new PrismaClient();
 
 export const User = {
   updateProfile: (id: number, name: string, iconUrl: string) =>
-    UpdateProfile(prisma, id, name, iconUrl),
+    UpdateFullProfile(prisma, id, name, iconUrl),
+  updateName: (id: number, name: string) => UpdateName(prisma, id, name),
+  updateIcon: (id: number, iconUrl: string) => UpdateIcon(prisma, id, iconUrl),
   createNew: (username: UserOptions) => CreateUser(prisma, username),
   getById: (id: number) => GetUserById(prisma, id),
   getByUsername: (username: string) => GetUserByUsername(prisma, username),
-  listUsers: () => ListUsers(prisma),
 };
 
 export const Post = {

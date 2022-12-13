@@ -7,7 +7,6 @@ const userRouter: Router = Router();
 userRouter.post("/signup", userController.SignUp);
 userRouter.post("/signin", userController.SignIn);
 userRouter.get("/user/:id", auth, userController.GetUser);
-userRouter.post("/user/update", auth, userController.UpdateName);
+userRouter.patch("/user/:id/update", auth, userController.UpdateProfile);
 
-userRouter.get("/list", userController.ListUsers);
 export default userRouter;

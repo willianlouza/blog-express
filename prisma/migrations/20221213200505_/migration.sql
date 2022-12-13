@@ -4,7 +4,7 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "icon" TEXT,
+    "iconUrl" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -14,6 +14,7 @@ CREATE TABLE "Post" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "imageUrl" TEXT NOT NULL,
     "authorId" INTEGER NOT NULL,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")

@@ -39,7 +39,7 @@ export async function GetUserById(
     try {
       await prisma.$connect();
       const user = await prisma.user.findUnique({
-        where: { id: id },
+        where: { id: +id },
       });
       prisma.$disconnect();
       resolve(user);
@@ -69,7 +69,7 @@ export async function GetUserByUsername(
   });
 }
 
-export async function UpdateProfile(
+export async function UpdateFullProfile(
   prisma: PrismaClient,
   id: number,
   name: string,
@@ -83,7 +83,7 @@ export async function UpdateProfile(
           name: name,
           iconUrl: iconUrl,
         },
-        where: { id: id },
+        where: { id: +id },
       });
       prisma.$disconnect();
       resolve(user);
@@ -94,15 +94,45 @@ export async function UpdateProfile(
   });
 }
 
-////
-
-export async function ListUsers(prisma: PrismaClient): Promise<User[] | null> {
+export async function UpdateName(
+  prisma: PrismaClient,
+  id: number,
+  name: string
+): Promise<User | null> {
   return new Promise(async (resolve, reject) => {
     try {
       await prisma.$connect();
-      const users = await prisma.user.findMany();
+      const user = await prisma.user.update({
+        data: {
+          name: name,
+        },
+        where: { id: +id },
+      });
       prisma.$disconnect();
-      resolve(users);
+      resolve(user);
+    } catch (err) {
+      prisma.$disconnect();
+      reject(err);
+    }
+  });
+}
+
+export async function UpdateIcon(
+  prisma: PrismaClient,
+  id: number,
+  iconUrl: string
+): Promise<User | null> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await prisma.$connect();
+      const user = await prisma.user.update({
+        data: {
+          iconUrl: iconUrl,
+        },
+        where: { id: +id },
+      });
+      prisma.$disconnect();
+      resolve(user);
     } catch (err) {
       prisma.$disconnect();
       reject(err);

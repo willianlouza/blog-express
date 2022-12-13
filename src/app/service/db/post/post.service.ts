@@ -1,7 +1,7 @@
 import { Post, PrismaClient, User } from "@prisma/client";
 import { create } from "domain";
 import {
-  UpdateProfile,
+  UpdateFullProfile,
   CreateUser,
   GetUserById,
   GetUserByUsername,
@@ -35,7 +35,7 @@ export async function GetAllPostsFromUser(
   return new Promise(async (resolve, reject) => {
     try {
       await prisma.$connect();
-      const author = await prisma.user.findUnique({ where: { id: uid } });
+      const author = await prisma.user.findUnique({ where: { id: +uid } });
       if (!author) {
         prisma.$disconnect();
         return reject(new Error());
@@ -63,7 +63,7 @@ export async function GetPostById(
   return new Promise(async (resolve, reject) => {
     try {
       await prisma.$connect();
-      const post = await prisma.post.findUnique({ where: { id: id } });
+      const post = await prisma.post.findUnique({ where: { id: +id } });
       prisma.$disconnect();
       return resolve(post);
     } catch (err) {
@@ -94,7 +94,7 @@ export async function CreatePost(
           imageUrl: data.imageUrl,
           author: {
             connect: {
-              id: data.authorId,
+              id: +data.authorId,
             },
           },
         },
@@ -117,7 +117,7 @@ export async function UpdatePost(
     try {
       await prisma.$connect();
       const post = await prisma.post.update({
-        where: { id: id },
+        where: { id: +id },
         data: {
           title: data.title,
           content: data.content,
@@ -141,7 +141,7 @@ export async function DeletePost(
     try {
       await prisma.$connect();
       const post = await prisma.post.delete({
-        where: { id: id },
+        where: { id: +id },
       });
       prisma.$disconnect();
       return resolve(post);

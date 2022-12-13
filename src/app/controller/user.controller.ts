@@ -135,20 +135,24 @@ class UserController {
     }
   }
   //Update user Name
-  //! Only update name but has to change icon to
-  public async UpdateName(req: Request, res: Response) {
+  public async UpdateProfile(
+    req: Request<{ id: number }, {}, { name?: string; icon?: string }, {}>,
+    res: Response
+  ) {
     try {
-      const { newName } = req.body;
+      const { name, icon } = req.body;
       const id = req.params.id;
 
-      if (!newName) {
+      if (!name && !icon) {
         return res.status(422).json({
           status: API_Status.ERROR,
-          message: "Precisa informar o nome que deseja alterar.",
+          message: "Precisa informar o nome e a foto que deseja alterar.",
         });
       }
 
-      const user = await User.getById(parseInt(id));
+      console.log("Start update");
+      const user = await User.getById(id);
+
       if (!user) {
         return res.status(422).json({
           status: API_Status.ERROR,
@@ -156,17 +160,43 @@ class UserController {
         });
       }
 
-      const updatedUser = await User.getByUsername(newName);
+      if (name && icon) {
+        if (name !== user.name && icon !== user.iconUrl) {
+          console.log("Trying to update full profile");
 
-      return res.status(200).json({
-        status: API_Status.OK,
-        message: "Nome alterado com sucesso.",
-        updatedUser,
+          const updatedUser = await User.updateProfile(id, name, icon);
+          return res.status(200).json({
+            status: API_Status.OK,
+            message: "Nome alterado com sucesso.",
+            updatedUser,
+          });
+        }
+      } else if (name) {
+        if (name !== user.name) {
+          const updatedUser = await User.updateName(id, name);
+          return res.status(200).json({
+            status: API_Status.OK,
+            message: "Nome alterado com sucesso.",
+            updatedUser,
+          });
+        }
+      } else if (icon) {
+        const updatedUser = await User.updateIcon(id, icon);
+        return res.status(200).json({
+          status: API_Status.OK,
+          message: "Nome alterado com sucesso.",
+          updatedUser,
+        });
+      }
+
+      return res.status(500).json({
+        status: API_Status.ERROR,
+        message: "Erro ao atualizar perfil.",
       });
     } catch (err) {
       return res.status(500).json({
         status: API_Status.ERROR,
-        message: "Não foi possível alterar o nome.",
+        message: "Não foi possível alterar o perfil.",
       });
     }
   }
@@ -175,27 +205,6 @@ class UserController {
     try {
       const id = req.params.id;
       const user = await User.getById(parseInt(id));
-      if (!user) {
-        return res.status(404).json({
-          status: API_Status.ERROR,
-          message: "Usuário não encontrado.",
-        });
-      }
-
-      return res
-        .status(200)
-        .json({ status: API_Status.OK, message: "Usuário encontrado.", user });
-    } catch (err) {
-      return res.status(500).json({
-        status: API_Status.ERROR,
-        message: "Não foi possível encontrar o usuário.",
-      });
-    }
-  }
-
-  public async ListUsers(req: Request, res: Response) {
-    try {
-      const user = await User.listUsers();
       if (!user) {
         return res.status(404).json({
           status: API_Status.ERROR,
