@@ -113,7 +113,7 @@ class UserController {
           },
           secret,
           {
-            expiresIn: "1d",
+            expiresIn: "90d",
           }
         );
         return res.status(200).json({
