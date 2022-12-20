@@ -232,10 +232,14 @@ class UserController {
         });
       }
       const name = user.name;
+      const icon = user.iconUrl;
 
-      return res
-        .status(200)
-        .json({ status: API_Status.OK, message: "Usuário encontrado.", name });
+      return res.status(200).json({
+        status: API_Status.OK,
+        message: "Usuário encontrado.",
+        name,
+        icon,
+      });
     } catch (err) {
       throw new Error();
     }
