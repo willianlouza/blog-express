@@ -220,6 +220,26 @@ class UserController {
       });
     }
   }
+
+  public async GetNameById(req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      const user = await User.getById(parseInt(id));
+      if (!user) {
+        return res.status(404).json({
+          status: API_Status.ERROR,
+          message: "Usuário não encontrado.",
+        });
+      }
+      const name = user.name;
+
+      return res
+        .status(200)
+        .json({ status: API_Status.OK, message: "Usuário encontrado.", name });
+    } catch (err) {
+      throw new Error();
+    }
+  }
 }
 
 export default new UserController();

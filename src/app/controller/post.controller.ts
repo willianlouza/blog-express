@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import API_Status from "../enum/API_Status";
-import { Post } from "../service/db";
+import { Post, User } from "../service/db";
 import { PostData } from "../service/db/post/post.service";
 
 class PostController {
@@ -66,7 +66,12 @@ class PostController {
           message: "Publicação não encontrada",
         });
       }
-      return res.status(200).json({ status: API_Status.OK, post });
+      const author = await User.getById(post.authorId);
+      const name = author?.name;
+
+      return res
+        .status(200)
+        .json({ status: API_Status.OK, post, author: name });
     } catch (err) {
       return res.status(500).json({
         status: API_Status.ERROR,
