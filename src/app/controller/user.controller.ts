@@ -161,23 +161,19 @@ class UserController {
       }
 
       if (name && icon) {
-        if (name !== user.name && icon !== user.iconUrl) {
-          const updatedUser = await User.updateProfile(id, name, icon);
-          return res.status(200).json({
-            status: API_Status.OK,
-            message: "Nome alterado com sucesso.",
-            updatedUser,
-          });
-        }
+        const updatedUser = await User.updateProfile(id, name, icon);
+        return res.status(200).json({
+          status: API_Status.OK,
+          message: "Nome alterado com sucesso.",
+          updatedUser,
+        });
       } else if (name) {
-        if (name !== user.name) {
-          const updatedUser = await User.updateName(id, name);
-          return res.status(200).json({
-            status: API_Status.OK,
-            message: "Nome alterado com sucesso.",
-            updatedUser,
-          });
-        }
+        const updatedUser = await User.updateName(id, name);
+        return res.status(200).json({
+          status: API_Status.OK,
+          message: "Nome alterado com sucesso.",
+          updatedUser,
+        });
       } else if (icon) {
         const updatedUser = await User.updateIcon(id, icon);
         return res.status(200).json({
